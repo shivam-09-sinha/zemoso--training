@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Admin | Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Team Management System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/users"  th:if="${current_user.getRole().toString()} == 'admin'">Users</a>
+                </li>
+            </ul>
+
+            <a class="btn btn-danger" style="margin-left: 3rem;"  href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    <h2 class="text-muted text-center">Edit User</h2>
+
+    <br />
+    <form action="#" th:action="@{'/users/' + ${user.id} + '/update' }" th:object="${user}"
+          method="POST">
+
+        <table class="table">
+            <tr th:if="${current_user.getRole().toString()} == 'admin'">
+                <td>Username:</td>
+                <td><input type="text" th:field="*{userName}" class="form-control" /></td>
+            </tr>
+            <tr th:if="${current_user.getRole().toString()} != 'admin'">
+                <td>Username:</td>
+                <td><input type="text" th:field="*{userName}" class="form-control" disabled /></td>
+            </tr>
+            <input type="hidden" th:field="*{userName}" th:value="${user.userName}" class="form-control" th:if="${current_user.getRole().toString()} != 'admin'" />
+            <tr>
+                <td>Email:</td>
+                <td><input type="text" th:field="*{email}" class="form-control" /></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><input type="text" th:field="*{phone}" class="form-control" /></td>
+            </tr>
+            <tr th:if="${current_user.getRole().toString()} == 'admin'">
+                <td>Role:</td>
+                <td>
+                    <select th:field="*{role}" class="form-control">
+                        <option value="">Select a role</option>
+                        <option value="admin">Admin</option>
+                        <option value="manager">Manager</option>
+                        <option value="user">User</option>
+                    </select>
+                </td>
+            </tr>
+            <input type="hidden" th:value="${user.password}" th:field="*{password}">
+            <tr>
+                <td colspan="2"><button type="submit" class="btn btn-primary">Update</button> </td>
+            </tr>
+        </table>
+    </form>
+
+
+</div>
+
+</body>
+</html>
